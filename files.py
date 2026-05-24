@@ -13,7 +13,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self.path == "/":
             self.home()
             return
-        
+
+        if self.path.startswith("/icons/"):
+            icon_path = self.path.lstrip("/")
+            full_path = os.path.join(icon_path)
+
+            if os.path.exists(full_path):
+                self.send_response(200)
+                self.send_header("Content-Type", "image/png")
+                self.end_headers()
+
+                with open(full_path, "rb") as f:
+                    self.wfile.write(f.read())
+            return
+
         file_path = self.path.lstrip("/")
         full_path = os.path.join(SHARED_FOLDER, file_path)
 
@@ -21,14 +34,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             try:
                 with open(full_path, "rb") as f:
                     self.send_response(200)
-                    self.send_header("Content-Disposition", f'attachment; filename="{os.path.basename(full_path)}"')
+
+                    self.send_header(
+                        "Content-Type",
+                        "application/octet-stream"
+                    )
+                    self.send_header(
+                        "Content-Disposition",
+                        f'attachment; filename="{os.path.basename(full_path)}"'
+                    )
                     self.end_headers()
+
                     self.wfile.write(f.read())
-                
+
             except BrokenPipeError:
                 pass
 
             return
+
         self.send_error(404, "File not found")
 
     def do_POST(self):
@@ -127,7 +150,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
             html += f"""
             <li>
-                <img src="/icons/{icon}" width="20" style="margin-right:10px; vertical-align:middle;">
+                <img src="icons/{icon}" width="20" style="margin-right:10px; vertical-align:middle;">
                 <a href="/{f}">{f}</a>
 
                 <form method="POST" action="/delete" style="display:inline;">
