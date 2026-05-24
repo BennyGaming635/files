@@ -124,12 +124,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         for f in files:
             icon = get_icon(f)
-            html += f'''
+
+            html += f"""
             <li>
-                <img src="/icons/{icon}" width="20" style="margin-right:10px;vertical-align:middle;">
-                <a href="/shared/{f}">{f}</a>
+                <img src="/icons/{icon}" width="20" style="margin-right:10px; vertical-align:middle;">
+                <a href="/{f}">{f}</a>
+
+                <form method="POST" action="/delete" style="display:inline;">
+                    <input type="hidden" name="filename" value="{f}">
+                    <button type="submit"
+                        style="margin-left:10px; background:#ef4444; border:none; color:white; padding:5px 10px; border-radius:6px; cursor:pointer;">
+                        Delete
+                    </button>
+                </form>
             </li>
-            '''
+            """
         html += """
                 </ul>
             </div>
