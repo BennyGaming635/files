@@ -98,16 +98,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         </style>
         </head>
         <body>
-        <h2>All Files</h2>
-
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <input type="submit" value="Upload">
-        </form>
-
-        <hr>
-        <h3>Files</h3>
-        <ul>
+        <div class="container">
+            <div class="card">
+                <div class="header">Simple Files</div>
+                <div class="muted">Upload and share files easily</div>
+            </div>
+            <div class="card">
+                <form action="/upload method="post" enctype="multipart/form-data">
+                    <input type="file" name="file">
+                    <input type="submit" value="Upload">
+                </form>
+            </div>
+            <div class="card">
+                <h3>Files</h3>
+                <ul>
         """
 
         for f in files:
