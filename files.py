@@ -63,6 +63,39 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 cursor: pointer;
                 margin-left: 10px;
             }}
+            input[type=submit]:hover {{
+                background: #16a34a;
+            }}
+            ul {{
+                list-style: none;
+                padding: 0;
+            }}
+            li {{
+                background: #334155;
+                margin: 8px 0;
+                padding: 10px;
+                border-radius: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }}
+            a {{
+                color: #60a5fa;
+                text-decoration: none;
+            }}
+            a:hover {{
+                text-decoration: underline;
+            }}
+            .header {{
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }}
+            .muted {{
+            color: #94a3b8;
+            font-size: 14px;
+            }}
+        </style>
         </head>
         <body>
         <h2>All Files</h2>
