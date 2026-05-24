@@ -15,6 +15,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+        if self.path.startswith("/icons/"):
+            file_path = self.path.lstrip("/")
+            full_path = os.path.join(file_path)
+
+            if os.path.isfile(full_path):
+                with open(full_path, "rb") as f:
+                    self.send_response(200)
+                    self.end_headers()
+                    self.wfile.write(f.read())
+                return
+
     def do_POST(self):
         if self.path == "/upload":
             self.upload()
