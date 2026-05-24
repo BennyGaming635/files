@@ -5,11 +5,9 @@ import os
 import cgi
 
 PORT = 8000
-SHARED_FOLDER = "shared"
+SHARED_FOLDER = "SHARED"
 
 os.makedirs(SHARED_FOLDER, exist_ok=True)
-os.chdir(SHARED_FOLDER)
-
 
 class Handler(http.server.SimpleHTTPRequestHandler):
 
