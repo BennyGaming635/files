@@ -97,8 +97,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         """
 
         for f in files:
-            html += f'<li><a href="/shared/{f}">{f}</a></li>'
-
+            icon = get_icon(f)
+            html += f'''
+            <li>
+                <img src="/icons/{icon}" width="20" style="margin-right:10px;vertical-align:middle;">
+                <a href="/{f}">{f}</a>
+            </li>
+            '''
         html += """
                 </ul>
             </div>
@@ -152,6 +157,19 @@ def get_ip():
         return "127.0.0.1"
     finally:
         s.close()
+
+def get_icon(filename):
+    ext = filename.lower().split(".")[-1]
+    mapping = {
+        "pdf": "pdf.png",
+        "txt": "txt.png",
+        "jpg": "jpg.png",
+        "jpeg": "jpg.png",
+        "png": "png.png",
+        "gif": "png.png",
+    }
+
+    return mapping.get(ext, "file.png")
 
 
 os.makedirs(SHARED_FOLDER, exist_ok=True)
