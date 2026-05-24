@@ -63,3 +63,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_response(303)
         self.send_header("Location", "/")
         self.end_headers()
+    
+    def get_ip():
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            s.connect(("8.8.8.8", 80))
+            return s.getsockname()[0]
+        except:
+            return "127.0.0.1"
+        finally:
+            s.close()
