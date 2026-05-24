@@ -34,6 +34,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/upload":
             self.upload()
+        elif self.path == "/delete":
+            self.delete_file()
 
     def home(self):
         files = os.listdir(SHARED_FOLDER)
@@ -170,7 +172,22 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_response(303)
         self.send_header("Location", "/")
         self.end_headers()
+    
+    def delete_file(self):
+        length = int(self.headers.get("Content-Length", 0))
+        data = self.rfile.read(length).decode()
 
+        filename = data.split("=")[-1]
+        filename = os.path.basename(filename)
+
+        path = os.path.join(SHARED_FOLDER, filename)
+
+        if os.path.exists(path):
+            os.remove(path)
+
+        self.send_response(303)
+        self.send_header("Location", "/")
+        self.end_headers()
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
