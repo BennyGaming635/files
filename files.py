@@ -104,7 +104,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <div class="muted">Upload and share files easily</div>
             </div>
             <div class="card">
-                <form action="/upload method="post" enctype="multipart/form-data">
+                <form action="/upload" method="post" enctype="multipart/form-data">
                     <input type="file" name="file">
                     <input type="submit" value="Upload">
                 </form>
