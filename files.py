@@ -26,6 +26,43 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         <html>
         <head>
         <title>Simple Files</title>
+        <style>
+            body {{
+                font-family: Arial;
+                background: #0f172a;
+                color: white;
+                margin: 0;
+                padding: 20px;
+            }}
+            .container {{
+                max-width: 800px;
+                margin: auto;
+            }}
+            .card {{
+                background: #1e293b;
+                padding: 20px;
+                border-radius: 12px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            }}
+            h1 {{
+                margin: 0;
+            }}
+            input[type=file] {{
+                padding: 10px;
+                background: #334155;
+                border-radius: 8px;
+                color: white;
+            }}
+            input[type=submit] {{
+                padding: 10px 15px;
+                background: #22c55e;
+                border: none;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+                margin-left: 10px;
+            }}
         </head>
         <body>
         <h2>All Files</h2>
