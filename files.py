@@ -12,19 +12,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
             self.home()
-        else:
-            super().do_GET()
+            return
+        
+        file_path = self.path.lstrip("/")
+        full_path = os.path.join(SHARED_FOLDER, file_path)
 
-        if self.path.startswith("/icons/"):
-            file_path = self.path.lstrip("/")
-            full_path = os.path.join(file_path)
-
-            if os.path.isfile(full_path):
+        if os.path.isfile(full_path):
+            try:
                 with open(full_path, "rb") as f:
                     self.send_response(200)
+                    self.send_header("Content-Disposition", f'attachment; filename="{os.path.basename(full_path)}"')
                     self.end_headers()
                     self.wfile.write(f.read())
-                return
+                
+            except BrokenPipeError:
+                pass
+
+            return
+        self.send_error(404, "File not found")
 
     def do_POST(self):
         if self.path == "/upload":
