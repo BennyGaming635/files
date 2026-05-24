@@ -41,18 +41,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(html.encode())
 
-hostname = socket.gethostname()
-local_ip = socket.gethostbyname(hostname)
-Handler = http.server.SimpleHTTPRequestHandler
+    def upload_file(self):
+        form = cgi.FieldStorage(
+            fp=self.rfile,
+            headers=self.headers,
+            environ={
+                "REQUEST_METHOD": "POST",
+                "CONTENT_TYPE": self.headers["Content-Type"],
+            },
+        )
 
-with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
-    print("=" * 40)
-    print("Files | The simple file server")
-    print("=" * 40)
-    print(f"Serving your simple files in: {os.getcwd()}")
-    print()
-    print("Open this on other devices:")
-    print(f"http://{local_ip}:{PORT}")
-    print("=" * 40)
+        file_item = form["file"]
 
-    httpd.serve_forever()
+        if file_item.filename:
+            filename = os.path.basename(file_item.filename)
+            path = os.path.join(SHARED_FOLDER, filename)
+
+            with open(path, "wb") as f:
+                f.write(file_item.file.read())
+
+        self.send_response(303)
+        self.send_header("Location", "/")
+        self.end_headers()
