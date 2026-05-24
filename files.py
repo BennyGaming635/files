@@ -7,8 +7,6 @@ import cgi
 PORT = 8000
 SHARED_FOLDER = "SHARED"
 
-os.makedirs(SHARED_FOLDER, exist_ok=True)
-
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
@@ -98,7 +96,6 @@ def get_ip():
 
 
 os.makedirs(SHARED_FOLDER, exist_ok=True)
-os.chdir(SHARED_FOLDER)
 
 ip = get_ip()
 
