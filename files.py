@@ -7,7 +7,13 @@ SHARED_FOLDER = "shared"
 PORT = 8000
 
 os.makedirs(SHARED_FOLDER, exist_ok=True)
-os.chdir(SHARED_FOLDER)
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path =="/":
+            self.list_page()
+        else:
+            super().do_GET()
 
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
