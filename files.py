@@ -15,6 +15,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+    def do_POST(self):
+        if self.path == "/upload":
+            self.upload_file()
+
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 Handler = http.server.SimpleHTTPRequestHandler
