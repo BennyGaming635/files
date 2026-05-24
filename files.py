@@ -27,34 +27,30 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         <head>
         <title>Simple Files</title>
         <style>
-            body {{
+            body {
                 font-family: Arial;
                 background: #0f172a;
                 color: white;
                 margin: 0;
                 padding: 20px;
-            }}
-            .container {{
+            }
+            .container {
                 max-width: 800px;
                 margin: auto;
-            }}
-            .card {{
+            }
+            .card {
                 background: #1e293b;
                 padding: 20px;
                 border-radius: 12px;
                 margin-bottom: 20px;
-                box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            }}
-            h1 {{
-                margin: 0;
-            }}
-            input[type=file] {{
+            }
+            input[type=file] {
                 padding: 10px;
                 background: #334155;
                 border-radius: 8px;
                 color: white;
-            }}
-            input[type=submit] {{
+            }
+            input[type=submit] {
                 padding: 10px 15px;
                 background: #22c55e;
                 border: none;
@@ -62,53 +58,39 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 color: white;
                 cursor: pointer;
                 margin-left: 10px;
-            }}
-            input[type=submit]:hover {{
-                background: #16a34a;
-            }}
-            ul {{
+            }
+            ul {
                 list-style: none;
                 padding: 0;
-            }}
-            li {{
+            }
+            li {
                 background: #334155;
                 margin: 8px 0;
                 padding: 10px;
                 border-radius: 8px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }}
-            a {{
+            }
+            a {
                 color: #60a5fa;
                 text-decoration: none;
-            }}
-            a:hover {{
-                text-decoration: underline;
-            }}
-            .header {{
-                font-size: 24px;
-                font-weight: bold;
-                margin-bottom: 10px;
-            }}
-            .muted {{
-            color: #94a3b8;
-            font-size: 14px;
-            }}
+            }
         </style>
         </head>
+
         <body>
         <div class="container">
+
             <div class="card">
-                <div class="header">Simple Files</div>
-                <div class="muted">Upload and share files easily</div>
+                <h2>Simple Files</h2>
+                <p>Upload and share files easily</p>
             </div>
+
             <div class="card">
                 <form action="/upload" method="post" enctype="multipart/form-data">
                     <input type="file" name="file">
                     <input type="submit" value="Upload">
                 </form>
             </div>
+
             <div class="card">
                 <h3>Files</h3>
                 <ul>
@@ -118,7 +100,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             html += f'<li><a href="/shared/{f}">{f}</a></li>'
 
         html += """
-        </ul>
+                </ul>
+            </div>
+
+        </div>
         </body>
         </html>
         """
