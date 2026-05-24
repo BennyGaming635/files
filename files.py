@@ -41,7 +41,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         """
 
         for f in files:
-            html += f'<li><a href="/{f}">{f}</a></li>'
+            html += f'<li><a href="/shared/{f}">{f}</a></li>'
 
         html += """
         </ul>
