@@ -64,12 +64,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Location", "/")
         self.end_headers()
     
-    def get_ip():
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            s.connect(("8.8.8.8", 80))
-            return s.getsockname()[0]
-        except:
-            return "127.0.0.1"
-        finally:
-            s.close()
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("8.8.8.8", 80))
+        return s.getsockname()[0]
+    except:
+        return "127.0.0.1"
+    finally:
+        s.close()
+
+ip = get_ip()
+
+print("=" * 40)
+print("Simple Files | UPLOADS ARE ENABLED")
+print("=" * 40)
+print(f"http://{ip}:{PORT}")
+print("=" * 40)
+
+os.chdir(SHARED_FOLDER)
+with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
+    httpd.serve_forever()
