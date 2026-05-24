@@ -8,6 +8,7 @@ PORT = 8000
 SHARED_FOLDER = "shared"
 
 os.makedirs(SHARED_FOLDER, exist_ok=True)
+os.chdir(SHARED_FOLDER)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
