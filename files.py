@@ -120,7 +120,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             html += f'''
             <li>
                 <img src="/icons/{icon}" width="20" style="margin-right:10px;vertical-align:middle;">
-                <a href="/{f}">{f}</a>
+                <a href="/shared/{f}">{f}</a>
             </li>
             '''
         html += """
