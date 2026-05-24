@@ -84,6 +84,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 color: #60a5fa;
                 text-decoration: none;
             }
+            li {
+                display: flex;
+                align-items: center;
+            }
+            img {
+                width: 20px;
+                height: 20px;
+            }
         </style>
         </head>
 
