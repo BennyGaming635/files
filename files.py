@@ -330,11 +330,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
 
     def upload(self):
-        path = self.getvalue("path", "")
-        upload_folder = os.path.join(SHARED_FOLDER, path)
-        os.makedirs(upload_folder, exist_ok=True)
-        filepath = os.path.join(upload_folder, filename)
-
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
@@ -351,15 +346,31 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         file_item = form["file"]
 
+        path = form.getvalue("path", "")
+
+        upload_folder = os.path.join(
+            SHARED_FOLDER,
+            path
+        )
+
+        os.makedirs(upload_folder, exist_ok=True)
+
         if file_item.filename:
             filename = os.path.basename(file_item.filename)
-            filepath = os.path.join(SHARED_FOLDER, filename)
+
+            filepath = os.path.join(
+                upload_folder,
+                filename
+            )
 
             with open(filepath, "wb") as f:
                 f.write(file_item.file.read())
 
         self.send_response(303)
-        self.send_header("Location", "/")
+        self.send_header(
+            "Location",
+            f"/?path={path}"
+        )
         self.end_headers()
     
     def delete_file(self):
