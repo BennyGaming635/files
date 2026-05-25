@@ -11,7 +11,7 @@ SHARED_FOLDER = "SHARED"
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        if self.path == "/":
+        if self.path.startswith("/?path=") or self.path == "/":
             self.home()
             return
 
