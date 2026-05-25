@@ -176,6 +176,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             <div class="card">
                 <div class="drop-zone" id="dropZone">
                     <p>Drag and drop files here</p>
+                    <input type="hidden" name="path" value="{safe_path}">
                     <input type="file"
                         name="file"
                         id="fileInput"
