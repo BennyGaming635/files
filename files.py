@@ -184,6 +184,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     </button>
                 </div>
             </div>
+            <div class="card">
+                <form action="/mkdir" method="POST">
+                    <input type="text"
+                        name="folder"
+                        placeholder="New folder name"
+                        required>
+                    <input type="hidden"
+                        name="path"
+                        value="{safe_path}">
+                    <button type="submit">
+                        Create Folder
+                    </button>
+                </form>
+            </div>
 
             <div class="card">
                 <h3>Files</h3>
