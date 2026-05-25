@@ -162,6 +162,61 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             button:hover {
                 background: #16a34a;
             }
+
+            .section-title {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: #e2e8f0;
+            }
+
+            .folder-form {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            
+            .folder-form input[type=text] {
+                flex: 1;
+                padding: 12px 14px;
+                border-radius: 10px;
+                border: 1px solid #334155;
+                background: #0f172a;
+                color: white;
+                outline: none;
+                transition: 0.2s;
+                font-size: 14px;
+            }
+
+            .folder-form input[type=text]:placeholder {
+                color: #94a3b8;
+            }
+
+            .folder-form input[type=text]:focus {
+                border-color: #60a5fa;
+                box-shadow: 0 0 0 3px rgba(96, 164, 250, 0.2);
+            }
+
+            .folder-form button {
+                padding: 12px 16px;
+                border-radius: 10px;
+                border: none;
+                background: #22c55e;
+                color: white;
+                cursor: pointer;
+                font-weight: 500;
+                transition: 0.2s;
+            }
+
+            .folder-form button:hover {
+                background: #16a34a;
+                transform: translateY(-1px);
+            }
+
+            .folder-form button:active {
+                transform: translateY(0px);
+            }
+
         </style>
         </head>
 
@@ -174,6 +229,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             </div>
 
             <div class="card">
+                <div id="progressContainer" style="display:none; margin-top:15px;">
+                    <div style="width:100%; background:#334155; border-radius:8px; overflow:hidden;">
+                        <div id="progressBar"
+                            style="height:12px; width:0%; background:#22c55e; transition:width 0.2s;">
+                        </div>
+                    </div>
+                    <p id="progressText" style="color:#94a3b8; font-size:14px;"></p>
+                </div>
                 <div class="drop-zone" id="dropZone">
                     <p>Drag and drop files here</p>
                     <input type="hidden" name="path" value="__SAFE_PATH__">
@@ -188,7 +251,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 </div>
             </div>
             <div class="card">
-                <form action="/mkdir" method="POST">
+                <form action="/mkdir" method="POST" class="folder-form">
                     <input type="text"
                         name="folder"
                         placeholder="New folder name"
