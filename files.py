@@ -61,7 +61,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.delete_file()
 
     def home(self):
-        files = os.listdir(SHARED_FOLDER)
+        current_path = self.path.split("?path=")
+        if len(current_path) > 1:
+            current_path = current_path[1]
+        else:
+            current_path = ""
+
+        safe_path = os.path.normpath(current_path)
+        folder = os.path.join(SHARED_FOLDER, safe_path)
+        os.makedirs(folder, exist_ok=True)
+
+        files = os.listdir(folder)
 
         html = """
         <html>
@@ -330,7 +340,6 @@ def get_icon(filename):
     }
 
     return mapping.get(ext, "file.png")
-
 
 os.makedirs(SHARED_FOLDER, exist_ok=True)
 
