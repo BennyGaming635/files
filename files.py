@@ -158,8 +158,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         const fileInput = document.getElementById('fileInput');
         const uploadForm = document.getElementById('uploadForm');
 
+        ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+            document.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+        });
+
         dropZone.addEventListener("dragover", (e) => {
-            e.preventDefault();
             dropZone.classList.add("dragover");
         });
 
@@ -168,7 +174,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         });
 
         dropZone.addEventListener("drop", (e) => {
-            e.preventDefault();
             dropZone.classList.remove("dragover");
             const files = e.dataTransfer.files;
             if (files.length > 0) {
