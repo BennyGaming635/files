@@ -267,15 +267,35 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         });
 
         async function uploadFile(file) {
-            const formData = new FormData();
-            formData.append("file", file);
+        const formData = new FormData();
+        formData.append("file", file);
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/upload");
+        
+        const progressBar = document.getElementById("progressBar");
+        const progressText = document.getElementById("progressText");
+        const progressContainer = document.getElementById("progressContainer");
 
-            await fetch("/upload", {
-                method: "POST",
-                body: formData
-            });
+        progressContainer.style.display = "block";
+        progressBar.style.width = "0%";
+        progressText.innerText = "Uploading... 0%";
 
-            location.reload();
+        xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                progressBar.style.width = percent + "%";
+                progressText.innerText = "Uploading... " + percent + "%";
+            }
+        };
+
+        xhr.onload = function () {
+            progressBar.style.width = "100%";
+            progressText.innerText = "Upload complete!";
+            setTimeout(() => location.reload(), 500);
+        };
+
+        xhr.send(formData);
         }
 
         fileInput.addEventListener("change", () => {
