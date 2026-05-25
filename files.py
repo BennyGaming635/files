@@ -122,6 +122,33 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 width: 20px;
                 height: 20px;
             }
+            .drop-zone {
+                border: 2px dashed #475569;
+                border-radius: 12px;
+                padding: 40px;
+                text-align: center;
+                background: #0f172a;
+                transition: 0.2s;
+            }
+            .drop-zone.dragover {
+                background: #1e293b;
+                border-color: #60a5fa;
+            }
+            .drop-zone p {
+                margin: 0 0 15px 0;
+                color: #94a3b8;
+            }
+            button {
+                padding: 10px 15px;
+                background: #22c55e;
+                border: none;
+                border-radius: 8px;
+                color: white;
+                cursor: pointer;
+            }
+            button:hover {
+                background: #16a34a;
+            }
         </style>
         </head>
 
