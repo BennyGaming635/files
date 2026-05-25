@@ -60,6 +60,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.upload()
         elif self.path == "/delete":
             self.delete_file()
+        elif self.path == "/mkdir":
+            self.mkdir()
 
     def home(self):
         current_path = self.path.split("?path=")
