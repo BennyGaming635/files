@@ -306,8 +306,33 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(html.encode())
 
+    def mkdir(self):
+        length = int(self.headers.get("Content-Length", 0))
+        data = self.rfile.read(length).decode()
+        import urllib.parse
+        
+        parsed = urllib.parse.parse_qs(data)
+        
+        folder_name = parsed.get("folder", [""])[0]
+        current_path = parsed.get("path", [""])[0]
+        
+        target = os.path.join(
+            SHARED_FOLDER,
+            current_path,
+            folder_name
+        )
+        os.makedirs(target, exist_ok=True)
+        self.send_response(303)
+        self.send_header("Location", f"/?path={current_path}")
+        self.end_headers()
+
 
     def upload(self):
+        path = self.getvalue("path", "")
+        upload_folder = os.path.join(SHARED_FOLDER, path)
+        os.makedirs(upload_folder, exist_ok=True)
+        filepath = os.path.join(upload_folder, filename)
+
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
