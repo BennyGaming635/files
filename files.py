@@ -153,71 +153,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         </head>
 
         <body>
-        <script>
-        const dropZone = document.getElementById("dropZone");
-        const fileInput = document.getElementById("fileInput");
-        const chooseBtn = document.getElementById("chooseBtn");
-
-
-        // stop browser opening files
-        window.addEventListener("dragover", function(e) {
-            e.preventDefault();
-        });
-
-        window.addEventListener("drop", function(e) {
-            e.preventDefault();
-        });
-
-
-        // button picker
-        chooseBtn.addEventListener("click", () => {
-            fileInput.click();
-        });
-
-
-        // upload function
-        async function uploadFile(file) {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            await fetch("/upload", {
-                method: "POST",
-                body: formData
-            });
-
-            location.reload();
-        }
-
-
-        // picker upload
-        fileInput.addEventListener("change", () => {
-            if (fileInput.files.length > 0) {
-                uploadFile(fileInput.files[0]);
-            }
-        });
-
-
-        // drag highlight
-        dropZone.addEventListener("dragover", () => {
-            dropZone.classList.add("dragover");
-        });
-
-        dropZone.addEventListener("dragleave", () => {
-            dropZone.classList.remove("dragover");
-        });
-
-
-        // drop upload
-        dropZone.addEventListener("drop", (e) => {
-            dropZone.classList.remove("dragover");
-
-            const files = e.dataTransfer.files;
-
-            if (files.length > 0) {
-                uploadFile(files[0]);
-            }
-        });
-        </script>
         <div class="container">
 
             <div class="card">
@@ -264,6 +199,59 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             </div>
 
         </div>
+                <script>
+        const dropZone = document.getElementById("dropZone");
+        const fileInput = document.getElementById("fileInput");
+        const chooseBtn = document.getElementById("chooseBtn");
+
+        window.addEventListener("dragover", function(e) {
+            e.preventDefault();
+        });
+
+        window.addEventListener("drop", function(e) {
+            e.preventDefault();
+        });
+
+        chooseBtn.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            location.reload();
+        }
+
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length > 0) {
+                uploadFile(fileInput.files[0]);
+            }
+        });
+
+        dropZone.addEventListener("dragover", () => {
+            dropZone.classList.add("dragover");
+        });
+
+        dropZone.addEventListener("dragleave", () => {
+            dropZone.classList.remove("dragover");
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            dropZone.classList.remove("dragover");
+
+            const files = e.dataTransfer.files;
+
+            if (files.length > 0) {
+                uploadFile(files[0]);
+            }
+        });
+        </script>
         </body>
         </html>
         """
