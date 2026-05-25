@@ -160,16 +160,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <p>Upload and share files easily</p>
             </div>
 
-            <div class="drop-zone" id="dropZone">
-                <p>Drag and drop files here</p>
-                <input type="file"
-                    name="file"
-                    id="fileInput"
-                    hidden>
-                <button type="button"
-                        onclick="document.getElementById('fileInput').click()">
-                    Choose File
-                </button>
+            <div class="card">
+                <div class="drop-zone" id="dropZone">
+                    <p>Drag and drop files here</p>
+                    <input type="file"
+                        name="file"
+                        id="fileInput"
+                        hidden>
+                    <button id="chooseBtn" type="button"
+                            onclick="document.getElementById('fileInput').click()">
+                        Choose File
+                    </button>
+                </div>
             </div>
 
             <div class="card">
