@@ -1,4 +1,5 @@
 import http.server
+from importlib.resources import files
 import socketserver
 import socket
 import os
@@ -189,18 +190,36 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <ul>
         """
 
-        for f in files:
+    for f in files:
+        full_item = os.path.join(folder, f)
+        if os.path.isdir(full_item):
+            html += f"""
+            <li>
+                📁
+                <a href="/?path={safe_path}/{f}">
+                    {f}
+                </a>
+            </li>
+            """
+        else:
             icon = get_icon(f)
+
+            file_url = f"{safe_path}/{f}".strip("/")
 
             html += f"""
             <li>
-                <img src="icons/{icon}" width="20" style="margin-right:10px; vertical-align:middle;">
-                <a href="/{f}">{f}</a>
+                <img src="/icons/{icon}" width="20">
+
+                <a href="/{file_url}">
+                    {f}
+                </a>
 
                 <form method="POST" action="/delete" style="display:inline;">
-                    <input type="hidden" name="filename" value="{f}">
-                    <button type="submit"
-                        style="margin-left:10px; background:#ef4444; border:none; color:white; padding:5px 10px; border-radius:6px; cursor:pointer;">
+                    <input type="hidden"
+                        name="filename"
+                        value="{file_url}">
+
+                    <button type="submit">
                         Delete
                     </button>
                 </form>
