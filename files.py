@@ -161,9 +161,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             </div>
 
             <div class="card">
-                <form action="/upload" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file">
-                    <input type="submit" value="Upload">
+                <div class="drop-zone" id="dropZone">
+                    <p>Drag and drop files here</p>
+                    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+                        <input type="file name="file" id="fileInput" hidden>
+                        <button type="button" onclick="document.getElementById('fileInput').click()">
+                    Choose File
+                </button>
                 </form>
             </div>
 
