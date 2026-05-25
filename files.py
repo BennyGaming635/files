@@ -76,7 +76,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         files = os.listdir(folder)
 
-        html = f"""
+        html = """
         <html>
         <head>
         <title>Simple Files</title>
@@ -176,7 +176,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             <div class="card">
                 <div class="drop-zone" id="dropZone">
                     <p>Drag and drop files here</p>
-                    <input type="hidden" name="path" value="{safe_path}">
+                    <input type="hidden" name="path" value="__SAFE_PATH__">
                     <input type="file"
                         name="file"
                         id="fileInput"
@@ -195,7 +195,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                         required>
                     <input type="hidden"
                         name="path"
-                        value="{safe_path}">
+                        value="__SAFE_PATH__">
                     <button type="submit">
                         Create Folder
                     </button>
@@ -206,6 +206,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <h3>Files</h3>
                 <ul>
         """
+
+        html = html.replace("__SAFE_PATH__", safe_path)
 
         for f in files:
             full_item = os.path.join(folder, f)
