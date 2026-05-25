@@ -206,41 +206,41 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <ul>
         """
 
-    for f in files:
-        full_item = os.path.join(folder, f)
-        if os.path.isdir(full_item):
-            html += f"""
-            <li>
-                📁
-                <a href="/?path={safe_path}/{f}">
-                    {f}
-                </a>
-            </li>
-            """
-        else:
-            icon = get_icon(f)
+        for f in files:
+            full_item = os.path.join(folder, f)
+            if os.path.isdir(full_item):
+                html += f"""
+                <li>
+                    📁
+                    <a href="/?path={safe_path}/{f}">
+                        {f}
+                    </a>
+                </li>
+                """
+            else:
+                icon = get_icon(f)
 
-            file_url = f"{safe_path}/{f}".strip("/")
+                file_url = f"{safe_path}/{f}".strip("/")
 
-            html += f"""
-            <li>
-                <img src="/icons/{icon}" width="20">
+                html += f"""
+                <li>
+                    <img src="/icons/{icon}" width="20">
 
-                <a href="/{file_url}">
-                    {f}
-                </a>
+                    <a href="/{file_url}">
+                        {f}
+                    </a>
 
-                <form method="POST" action="/delete" style="display:inline;">
-                    <input type="hidden"
-                        name="filename"
-                        value="{file_url}">
+                    <form method="POST" action="/delete" style="display:inline;">
+                        <input type="hidden"
+                            name="filename"
+                            value="{file_url}">
 
-                    <button type="submit">
-                        Delete
-                    </button>
-                </form>
-            </li>
-            """
+                        <button type="submit">
+                            Delete
+                        </button>
+                    </form>
+                </li>
+                """
         html += """
                 </ul>
             </div>
