@@ -156,14 +156,48 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         <script>
         const dropZone = document.getElementById("dropZone");
         const fileInput = document.getElementById("fileInput");
+        const chooseBtn = document.getElementById("chooseBtn");
 
-        ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
-            document.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-            });
+
+        // stop browser opening files
+        window.addEventListener("dragover", function(e) {
+            e.preventDefault();
         });
 
+        window.addEventListener("drop", function(e) {
+            e.preventDefault();
+        });
+
+
+        // button picker
+        chooseBtn.addEventListener("click", () => {
+            fileInput.click();
+        });
+
+
+        // upload function
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            await fetch("/upload", {
+                method: "POST",
+                body: formData
+            });
+
+            location.reload();
+        }
+
+
+        // picker upload
+        fileInput.addEventListener("change", () => {
+            if (fileInput.files.length > 0) {
+                uploadFile(fileInput.files[0]);
+            }
+        });
+
+
+        // drag highlight
         dropZone.addEventListener("dragover", () => {
             dropZone.classList.add("dragover");
         });
@@ -172,18 +206,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             dropZone.classList.remove("dragover");
         });
 
-        function uploadFile(file) {
-            const formData = new FormData();
-            formData.append("file", file);
 
-            fetch("/upload", {
-                method: "POST",
-                body: formData
-            }).then(() => {
-                location.reload();
-            });
-        }
-
+        // drop upload
         dropZone.addEventListener("drop", (e) => {
             dropZone.classList.remove("dragover");
 
@@ -191,12 +215,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
             if (files.length > 0) {
                 uploadFile(files[0]);
-            }
-        });
-
-        fileInput.addEventListener("change", () => {
-            if (fileInput.files.length > 0) {
-                uploadFile(fileInput.files[0]);
             }
         });
         </script>
@@ -207,15 +225,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <p>Upload and share files easily</p>
             </div>
 
-            <div class="card">
-                <div class="drop-zone" id="dropZone">
-                    <p>Drag and drop files here</p>
-                    <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data">
-                        <input type="file name="file" id="fileInput" hidden>
-                        <button type="button" onclick="document.getElementById('fileInput').click()">
+            <div class="drop-zone" id="dropZone">
+                <p>Drag and drop files here</p>
+                <input type="file"
+                    name="file"
+                    id="fileInput"
+                    hidden>
+                <button type="button"
+                        onclick="document.getElementById('fileInput').click()">
                     Choose File
                 </button>
-                </form>
             </div>
 
             <div class="card">
