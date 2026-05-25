@@ -76,7 +76,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         files = os.listdir(folder)
 
-        html = """
+        html = f"""
         <html>
         <head>
         <title>Simple Files</title>
