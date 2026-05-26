@@ -8,12 +8,13 @@ import urllib.parse
 
 PORT = 8000
 SHARED_FOLDER = "SHARED"
-
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
+        parsed = urllib.parse.parse_qs(self.path.split("?", 1)[-1]) if "?" in self.path else {}
+        search = parsed.get("search", [""])[0].lower()
         if self.path.startswith("/?path=") or self.path == "/":
-            self.home()
+            self.home(search)
             return
 
         if self.path.startswith("/icons/"):
@@ -64,7 +65,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         elif self.path == "/mkdir":
             self.mkdir()
 
-    def home(self):
+    def home(self, search):
         current_path = self.path.split("?path=")
         if len(current_path) > 1:
             current_path = current_path[1]
@@ -91,7 +92,12 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         folder = os.path.join(SHARED_FOLDER, safe_path)
         os.makedirs(folder, exist_ok=True)
 
-        files = os.listdir(folder)
+        all_items = os.listdir(folder)
+
+        if search:
+            files = [f for f in all_items if search in f.lower()]
+        else:
+            files = all_items
 
         html = """
         <html>
