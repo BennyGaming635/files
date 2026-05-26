@@ -9,10 +9,6 @@ import urllib.parse
 PORT = 8000
 SHARED_FOLDER = "SHARED"
 
-query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
-current_path = query.get("path", [""])[0]
-search = query.get("search", [""])[0].lower()
-
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
@@ -64,7 +60,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         elif self.path == "/mkdir":
             self.mkdir()
 
-    def home(self, search):
+    def home(self):
+        query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
+        current_path = query.get("path", [""])[0]
+        search = query.get("search", [""])[0].lower().strip()
         current_path = self.path.split("?path=")
         if len(current_path) > 1:
             current_path = current_path[1]
