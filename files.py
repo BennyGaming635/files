@@ -1,5 +1,6 @@
 import http.server
 from importlib.resources import files
+from re import search
 import socketserver
 import socket
 import os
@@ -97,10 +98,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         all_items = os.listdir(folder)
 
-        if search:
-            files = [f for f in all_items if search in f.lower()]
-        else:
-            files = all_items
+        files = []
+        for item in all_items:
+            if search and search not in item.lower():
+                continue
+            files.append(item)
 
         html = """
         <html>
