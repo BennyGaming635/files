@@ -252,6 +252,39 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 transform: translateY(0px);
             }
 
+            .search-form {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .search-form input[type="text"] {
+                flex: 1;
+                padding: 12px 14px;
+                border-radius: 10px;
+                border: 1px solid #334155;
+                background: #0f172a;
+                color: white;
+                outline: none;
+            }
+
+            .search-form input[type="text"]:focus {
+                border-color: #60a5fa;
+                box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+            }
+
+            .search-form button {
+                padding: 12px 16px;
+                border-radius: 10px;
+                border: none;
+                background: #3b82f6;
+                color: white;
+                cursor: pointer;
+            }
+
+            .search-form button:hover {
+                background: #2563eb;
+            }
+
         </style>
         </head>
 
