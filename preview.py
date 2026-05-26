@@ -40,7 +40,7 @@ def render_preview(file_path):
         </style>
     </head>
     <body>
-        <img src="/{file_path}">
+        <img src="/{file_path}?raw=1">
         <a href="/{file_path}" download>Download</a>
     </body>
     </html>
