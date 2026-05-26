@@ -8,16 +8,14 @@ import urllib.parse
 
 PORT = 8000
 SHARED_FOLDER = "SHARED"
+
+query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
+current_path = query.get("path", [""])[0]
+search = query.get("search", [""])[0].lower()
+
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        query = urllib.parse.parse_qs(self.path.split("?", 1)[-1]) if "?" in self.path else {}
-        current_path = query.get("path", [""])[0]
-        search = query.get("search", [""])[0].lower()
-        if self.path.startswith("/?path=") or self.path == "/":
-            self.home(search)
-            return
-
         if self.path.startswith("/icons/"):
             icon_path = self.path.lstrip("/")
             full_path = os.path.join(icon_path)
