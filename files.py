@@ -302,6 +302,21 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     </button>
                 </form>
             </div>
+            <div class="card">
+                <form method="GET" action="/" class="search-form">
+                    <input
+                        type="hidden"
+                        name="path"
+                        value="__SAFE_PATH__"
+                    >
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search files..."
+                    >
+                    <button type="submit">Search</button>
+                </form>
+            </div>
 
             <div class="card">
                 <h3>Files</h3>
