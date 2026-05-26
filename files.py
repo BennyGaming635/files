@@ -6,6 +6,7 @@ import socket
 import os
 import cgi
 import urllib.parse
+import preview
 
 PORT = 8000
 SHARED_FOLDER = "SHARED"
@@ -40,19 +41,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         full_path = os.path.join(SHARED_FOLDER, file_path)
 
         if os.path.isfile(full_path):
-            try:
+            if preview.is_previewable(full_path) and "download=1" not in self.path:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+
+                self.wfile.write(preview.render_preview(file_path).encode())
+                return
+            if "download=1" in self.path:
                 with open(full_path, "rb") as f:
                     self.send_response(200)
-                    self.send_header("Content-Type", "application/octet-stream")
+                    self.sender_header("Content-Type", "application/octet-stream")
                     self.send_header(
                         "Content-Disposition",
                         f'attachment; filename="{os.path.basename(full_path)}"'
                     )
                     self.end_headers()
                     self.wfile.write(f.read())
-            except BrokenPipeError:
-                pass
-            return
+                return
 
         self.send_error(404, "File not found")
 
