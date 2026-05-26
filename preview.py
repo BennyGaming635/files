@@ -58,22 +58,27 @@ def render_video(file_path):
         <style>
             body {{
                 margin: 0;
-                background: #0f172aa;
+                background: #0f172a;
+                color: white;
+                font-family: Arial;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
                 height: 100vh;
-                color: white;
             }}
+
             video {{
                 max-width: 90%;
                 max-height: 80vh;
                 border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             }}
+
             a {{
-                margin-top: 12px;
+                margin-top: 20px;
                 color: #60a5fa;
+                text-decoration: none;
             }}
         </style>
     </head>
