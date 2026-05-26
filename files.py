@@ -4,6 +4,7 @@ from re import search
 import socketserver
 import socket
 import os
+import mimetypes
 import cgi
 import urllib.parse
 import preview
@@ -41,6 +42,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         full_path = os.path.join(SHARED_FOLDER, file_path)
 
         if os.path.isfile(full_path):
+            if "raw=1" in query:
+                self.send_response(200)
+                content_type, _ = mimetypes.guess_type(full_path)
+                self.send_header("Content-Type", content_type or "application/octet-stream")
+                self.end_headers()
+
+                with open(full_path, "rb") as f:
+                    self.wfile.write(f.read())
+                return
+
             if preview.is_previewable(full_path) and "download=1" not in self.path:
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html")
