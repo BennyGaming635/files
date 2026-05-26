@@ -13,8 +13,16 @@ SHARED_FOLDER = "SHARED"
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        if self.path.startswith("/icons/"):
-            icon_path = self.path.lstrip("/")
+        parsed = urllib.parse.urlsplit(self.path)
+        path = parsed.path
+        query = urllib.parse.parse_qs(parsed.query)
+
+        if path == "/":
+            self.home()
+            return
+
+        if path.startswith("/icons/"):
+            icon_path = path.lstrip("/")
             full_path = os.path.join(icon_path)
 
             if os.path.exists(full_path):
@@ -24,31 +32,26 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
                 with open(full_path, "rb") as f:
                     self.wfile.write(f.read())
+            else:
+                self.send_error(404, "Icon not found")
             return
 
-        file_path = self.path.lstrip("/")
+        file_path = path.lstrip("/")
         full_path = os.path.join(SHARED_FOLDER, file_path)
 
         if os.path.isfile(full_path):
             try:
                 with open(full_path, "rb") as f:
                     self.send_response(200)
-
-                    self.send_header(
-                        "Content-Type",
-                        "application/octet-stream"
-                    )
+                    self.send_header("Content-Type", "application/octet-stream")
                     self.send_header(
                         "Content-Disposition",
                         f'attachment; filename="{os.path.basename(full_path)}"'
                     )
                     self.end_headers()
-
                     self.wfile.write(f.read())
-
             except BrokenPipeError:
                 pass
-
             return
 
         self.send_error(404, "File not found")
