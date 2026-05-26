@@ -77,6 +77,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if safe_path == ".":
             safe_path = ""
 
+        folder = os.path.join(SHARED_FOLDER, safe_path)
+        os.makedirs(folder, exist_ok=True)
+
+        all_items = os.listdir(folder)
+
         breadcrumbs = '<a href="/">Home</a>'
         if safe_path:
             parts = safe_path.split("/")
