@@ -11,8 +11,9 @@ SHARED_FOLDER = "SHARED"
 class Handler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
-        parsed = urllib.parse.parse_qs(self.path.split("?", 1)[-1]) if "?" in self.path else {}
-        search = parsed.get("search", [""])[0].lower()
+        query = urllib.parse.parse_qs(self.path.split("?", 1)[-1]) if "?" in self.path else {}
+        current_path = query.get("path", [""])[0]
+        search = query.get("search", [""])[0].lower()
         if self.path.startswith("/?path=") or self.path == "/":
             self.home(search)
             return
@@ -256,7 +257,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 display: flex;
                 gap: 10px;
             }
-            
+
             .search-form input[type="text"] {
                 flex: 1;
                 padding: 12px 14px;
