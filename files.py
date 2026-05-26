@@ -86,7 +86,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     build = part
 
                 breadcrumbs += f' / <a href="/?path={build}">{part}</a>'
-                
+
         folder = os.path.join(SHARED_FOLDER, safe_path)
         os.makedirs(folder, exist_ok=True)
 
@@ -128,6 +128,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 color: white;
                 cursor: pointer;
                 margin-left: 10px;
+            }
+            .breadcrumbs {
+                margin-bottom: 15px;
+                font-size: 14px;
+                color: #94a3b8;
+            }
+            .breadcrumbs a {
+                color: #60a5fa;
+                text-decoration: none;
+            }
+            .breadcrumbs a:hover {
+                text-decoration: underline;
             }
             ul {
                 list-style: none;
