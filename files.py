@@ -4,6 +4,7 @@ import socketserver
 import socket
 import os
 import cgi
+import urllib.parse
 
 PORT = 8000
 SHARED_FOLDER = "SHARED"
