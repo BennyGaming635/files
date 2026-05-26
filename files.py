@@ -255,6 +255,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 <h2>Simple Files</h2>
                 <p>Upload and share files easily</p>
             </div>
+            <div class="card breadcrumbs">
+                __BREADCRUMBS__
+            </div>
 
             <div class="card">
                 <div id="progressContainer" style="display:none; margin-top:15px;">
@@ -299,6 +302,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         """
 
         html = html.replace("__SAFE_PATH__", safe_path)
+        html = html.replace("__BREADCRUMBS__", breadcrumbs)
 
         for f in files:
             full_item = os.path.join(folder, f)
