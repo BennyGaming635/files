@@ -71,6 +71,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             current_path = ""
 
         safe_path = os.path.normpath(current_path)
+        if safe_path == ".":
+            safe_path = ""
+        
         folder = os.path.join(SHARED_FOLDER, safe_path)
         os.makedirs(folder, exist_ok=True)
 
