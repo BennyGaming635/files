@@ -70,7 +70,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if "download=1" in self.path:
                 with open(full_path, "rb") as f:
                     self.send_response(200)
-                    self.sender_header("Content-Type", "application/octet-stream")
+                    self.send_header("Content-Type", "application/octet-stream")
                     self.send_header(
                         "Content-Disposition",
                         f'attachment; filename="{os.path.basename(full_path)}"'
