@@ -1,13 +1,17 @@
 import os
 
 IMAGE_EXTS = {"png", "jpg", "jpeg", "gif", "webp"}
+VIDEO_EXTS = {"mp4", "webm", "ogg"}
 
-def is_previewable(filename):
+def is_image(filename):
     ext = filename.lower().split(".")[-1]
     return ext in IMAGE_EXTS
 
+def is_video(filename):
+    ext = filename.lower().split(".")[-1]
+    return ext in VIDEO_EXTS
 
-def render_preview(file_path):
+def render_image(file_path):
     return f"""
     <html>
     <head>
@@ -42,6 +46,42 @@ def render_preview(file_path):
     <body>
         <img src="/{file_path}?raw=1">
         <a href="/{file_path}" download>Download</a>
+    </body>
+    </html>
+    """
+
+def render_video(file_path):
+    return f"""
+    <html>
+    <head>
+        <title>Preview</title>
+        <style>
+            body {{
+                margin: 0;
+                background: #0f172aa;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                color: white;
+            }}
+            video {{
+                max-width: 90%;
+                max-height: 80vh;
+                border-radius: 12px;
+            }}
+            a {{
+                margin-top: 12px;
+                color: #60a5fa;
+            }}
+        </style>
+    </head>
+    <body>
+        <video controls autoplay>
+            <source src="/{file_path}">
+        </video>
+        <a href="/{file_path}?download=1">Download</a>
     </body>
     </html>
     """
