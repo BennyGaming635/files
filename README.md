@@ -3,5 +3,8 @@ Simple Files is a simple to use network web server for storing things. At the mo
 
 If you have any feature ideas make an issue and I'll add em, otherwise enjoy :-)
 
+
+
+
 >[!CAUTION]
 > please dont professionally use this, actually dont use this at all
