@@ -42,7 +42,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         full_path = os.path.join(SHARED_FOLDER, file_path)
 
         if os.path.isfile(full_path):
-            if "raw=1" in query:
+            if query.get("raw", [""])[0] == "1":
                 self.send_response(200)
                 content_type, _ = mimetypes.guess_type(full_path)
                 self.send_header("Content-Type", content_type or "application/octet-stream")
