@@ -52,12 +52,20 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                     self.wfile.write(f.read())
                 return
 
-            if preview.is_previewable(full_path) and "download=1" not in self.path:
+            if preview.is_image(full_path):
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html")
                 self.end_headers()
 
-                self.wfile.write(preview.render_preview(file_path).encode())
+                self.wfile.write(preview.render_image(file_path).encode())
+                return
+
+            if preview.is_video(full_path):
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+
+                self.wfile.write(preview.render_video(file_path).encode())
                 return
             if "download=1" in self.path:
                 with open(full_path, "rb") as f:
