@@ -1,0 +1,9 @@
+http.server
+socketserver
+socket
+mimetypes
+os
+cgi
+urllib
+
+# Your device/python install should already have these but you can install them just in case if for whatever reason they are missing on your install.
