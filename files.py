@@ -343,7 +343,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 </div>
                 <div class="drop-zone" id="dropZone">
                     <p>Drag and drop files here</p>
-                    <input type="hidden" name="path" value="__SAFE_PATH__">
+                    <input type="hidden" name="currentPath" value="__SAFE_PATH__">
                     <input type="file"
                         name="file"
                         id="fileInput"
@@ -361,7 +361,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                         placeholder="New folder name"
                         required>
                     <input type="hidden"
-                        name="path"
+                        name="currentPath"
                         value="__SAFE_PATH__">
                     <button type="submit">
                         Create Folder
@@ -421,6 +421,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         const dropZone = document.getElementById("dropZone");
         const fileInput = document.getElementById("fileInput");
         const chooseBtn = document.getElementById("chooseBtn");
+        const currentPath = document.getElementById("currentPath").value;
+        formData.append("path", currentPath);
 
         window.addEventListener("dragover", function(e) {
             e.preventDefault();
@@ -437,7 +439,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         async function uploadFile(file) {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("path", "__SAFE_PATH__");
+        formData.append("currentPath", "__SAFE_PATH__");
         
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/upload");
@@ -508,7 +510,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         parsed = urllib.parse.parse_qs(data)
         
         folder_name = parsed.get("folder", [""])[0]
-        current_path = parsed.get("path", [""])[0]
+        current_path = parsed.get("currentPath", [""])[0]
         
         target = os.path.join(
             SHARED_FOLDER,
