@@ -84,7 +84,7 @@ def render_video(file_path):
     </head>
     <body>
         <video controls autoplay>
-            <source src="/{file_path}=?raw=1">
+            <source src="/{file_path}?raw=1">
         </video>
         <a href="/{file_path}?download=1">Download</a>
     </body>
