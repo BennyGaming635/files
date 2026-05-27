@@ -538,7 +538,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         file_item = form["file"]
 
-        path = form.getvalue("path", "")
+        path = form.getvalue("currentPath", "")
 
         upload_folder = os.path.join(
             SHARED_FOLDER,
