@@ -417,7 +417,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             </div>
 
         </div>
-                <script>
+        <script>
         const dropZone = document.getElementById("dropZone");
         const fileInput = document.getElementById("fileInput");
         const chooseBtn = document.getElementById("chooseBtn");
@@ -425,46 +425,51 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         window.addEventListener("dragover", function(e) {
             e.preventDefault();
         });
-
+        
         window.addEventListener("drop", function(e) {
             e.preventDefault();
         });
-
+        
         chooseBtn.addEventListener("click", () => {
             fileInput.click();
         });
-
+        
+        function getCurrentPath() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("path") || "";
+        }
+        
         async function uploadFile(file) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("currentPath", "__SAFE_PATH__");
-        
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "/upload");
-        
-        const progressBar = document.getElementById("progressBar");
-        const progressText = document.getElementById("progressText");
-        const progressContainer = document.getElementById("progressContainer");
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("currentPath", getCurrentPath());
+            
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/upload");
+            
+            const progressContainer = document.getElementById("progressContainer");
+            const progressBar = document.getElementById("progressBar");
+            const progressText = document.getElementById("progressText");
+            
+            progressContainer.style.display = "block";
+            progressBar.style.width = "0%";
+            progressText.innerText = "Uploading... 0%";
 
-        progressContainer.style.display = "block";
-        progressBar.style.width = "0%";
-        progressText.innerText = "Uploading... 0%";
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    pprogressBar.style.width = percent + "%";
+                    progressText.innerText = "Uploading... " + percent + "%";
+                }
+            };
 
-        xhr.upload.onprogress = function (e) {
-            if (e.lengthComputable) {
-                const percent = Math.round((e.loaded / e.total) * 100);
-                progressBar.style.width = percent + "%";
-                progressText.innerText = "Uploading... " + percent + "%";
-            }
-        };
+            xhr.onload = function () {
+                progressBar.style.width = "100%";
+                progressText.innerText = "Upload complete!";
+                setTimeout(() => location.reload(), 400);
+            };
 
-        xhr.onload = function () {
-            progressBar.style.width = "100%";
-            progressText.innerText = "Upload complete!";
-            setTimeout(() => location.reload(), 500);
-        };
-
-        xhr.send(formData);
+            xhr.send(formData);
         }
 
         fileInput.addEventListener("change", () => {
@@ -481,11 +486,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             dropZone.classList.remove("dragover");
         });
 
-        dropZone.addEventListener("drop", (e) => {
+        dragZone.addEventListener("drop", (e) => {
+            e.preventDefault();
             dropZone.classList.remove("dragover");
-
+            
             const files = e.dataTransfer.files;
-
             if (files.length > 0) {
                 uploadFile(files[0]);
             }
@@ -555,7 +560,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.send_response(303)
         self.send_header("Location", f"/?path={path}")
         self.end_headers()
-        
+
     def delete_file(self):
         length = int(self.headers.get("Content-Length", 0))
         data = self.rfile.read(length).decode()
