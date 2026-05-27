@@ -437,6 +437,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         async function uploadFile(file) {
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("path", "__SAFE_PATH__");
         
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/upload");
