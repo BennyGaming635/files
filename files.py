@@ -421,8 +421,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         const dropZone = document.getElementById("dropZone");
         const fileInput = document.getElementById("fileInput");
         const chooseBtn = document.getElementById("chooseBtn");
-        const currentPath = document.getElementById("currentPath").value;
-        formData.append("path", currentPath);
 
         window.addEventListener("dragover", function(e) {
             e.preventDefault();
