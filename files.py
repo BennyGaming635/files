@@ -91,39 +91,19 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     def home(self):
         query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
-        current_path = query.get("path", [""])[0]
+
         search = query.get("search", [""])[0].lower().strip()
-        current_path = self.path.split("?path=")
-        if len(current_path) > 1:
-            current_path = current_path[1]
-        else:
+        current_path = query.get("path", [""])[0]
+        current_path = urllib.parse.unquote(current_path)
+        current_path = os.path.normpath(current_path).replace("\\", "/")
+
+        if current_path in [".", "./"]:
             current_path = ""
 
-        safe_path = os.path.normpath(current_path)
-        if safe_path == ".":
-            safe_path = ""
-
+        safe_path = current_path
         folder = os.path.join(SHARED_FOLDER, safe_path)
+        folder = os.path.normpath(folder)
         os.makedirs(folder, exist_ok=True)
-
-        all_items = os.listdir(folder)
-
-        breadcrumbs = '<a href="/">Home</a>'
-        if safe_path:
-            parts = safe_path.split("/")
-            build = ""
-
-            for part in parts:
-                if build:
-                    build += "/" + part
-                else:
-                    build = part
-
-                breadcrumbs += f' / <a href="/?path={build}">{part}</a>'
-
-        folder = os.path.join(SHARED_FOLDER, safe_path)
-        os.makedirs(folder, exist_ok=True)
-
         all_items = os.listdir(folder)
 
         files = []
@@ -131,6 +111,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             if search and search not in item.lower():
                 continue
             files.append(item)
+
+        breadcrumbs = '<a href="/">Home</a>'
+        if safe_path:
+            parts = safe_path.split("/")
+            build = ""
+
+            for part in parts:
+                build = f"{build}/{part}" if build else part
+                breadcrumbs += f' / <a href="/?path={build}">{part}</a>'
 
         html = """
         <html>
@@ -456,11 +445,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             progressText.innerText = "Uploading... 0%";
 
             xhr.upload.onprogress = function (e) {
-                if (e.lengthComputable) {
-                    const percent = Math.round((e.loaded / e.total) * 100);
-                    pprogressBar.style.width = percent + "%";
-                    progressText.innerText = "Uploading... " + percent + "%";
-                }
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        progressBar.style.width = percent + "%";
+                        progressText.innerText = "Uploading... " + percent + "%";
+                    }
             };
 
             xhr.onload = function () {
@@ -486,7 +475,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             dropZone.classList.remove("dragover");
         });
 
-        dragZone.addEventListener("drop", (e) => {
+        dropZone.addEventListener("drop", (e) => {
             e.preventDefault();
             dropZone.classList.remove("dragover");
             
@@ -509,20 +498,23 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", 0))
         data = self.rfile.read(length).decode()
         import urllib.parse
-        
         parsed = urllib.parse.parse_qs(data)
-        
+
         folder_name = parsed.get("folder", [""])[0]
         current_path = parsed.get("currentPath", [""])[0]
-        
-        target = os.path.join(
-            SHARED_FOLDER,
-            current_path,
-            folder_name
-        )
+
+        current_path = urllib.parse.unquote(current_path)
+        current_path = os.path.normpath(current_path).replace("\\", "/").lstrip("/")
+
+        target = os.path.normpath(os.path.join(SHARED_FOLDER, current_path, folder_name))
+        shared_abs = os.path.abspath(SHARED_FOLDER)
+        target_abs = os.path.abspath(target)
+        if os.path.commonpath([shared_abs, target_abs]) != shared_abs:
+            target = os.path.join(SHARED_FOLDER, folder_name)
+
         os.makedirs(target, exist_ok=True)
         self.send_response(303)
-        self.send_header("Location", f"/?path={current_path}")
+        self.send_header("Location", f"/?path={urllib.parse.quote(current_path)}")
         self.end_headers()
 
 
@@ -545,10 +537,15 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
         path = form.getvalue("currentPath", "")
         path = urllib.parse.unquote(path)
-        path = os.path.normpath(path).replace("\\", "/")
-        path = path.lstrip("/")
+        path = os.path.normpath(path).replace("\\", "/").lstrip("/")
 
-        upload_folder = os.path.join(SHARED_FOLDER, path)
+        upload_folder = os.path.normpath(os.path.join(SHARED_FOLDER, path))
+        # Prevent directory traversal: ensure upload_folder is inside SHARED_FOLDER
+        shared_abs = os.path.abspath(SHARED_FOLDER)
+        upload_abs = os.path.abspath(upload_folder)
+        if os.path.commonpath([shared_abs, upload_abs]) != shared_abs:
+            upload_folder = SHARED_FOLDER
+
         os.makedirs(upload_folder, exist_ok=True)
 
         if file_item.filename:
@@ -564,14 +561,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def delete_file(self):
         length = int(self.headers.get("Content-Length", 0))
         data = self.rfile.read(length).decode()
+        import urllib.parse
+        parsed = urllib.parse.parse_qs(data)
+        filename = parsed.get("filename", [""])[0]
 
-        filename = data.split("=")[-1]
-        filename = os.path.basename(filename)
+        filename = urllib.parse.unquote(filename)
+        filename = os.path.normpath(filename).replace("\\", "/").lstrip("/")
 
-        path = os.path.join(SHARED_FOLDER, filename)
-
-        if os.path.exists(path):
-            os.remove(path)
+        target = os.path.normpath(os.path.join(SHARED_FOLDER, filename))
+        shared_abs = os.path.abspath(SHARED_FOLDER)
+        target_abs = os.path.abspath(target)
+        if os.path.commonpath([shared_abs, target_abs]) == shared_abs and os.path.exists(target_abs):
+            os.remove(target_abs)
 
         self.send_response(303)
         self.send_header("Location", "/")
