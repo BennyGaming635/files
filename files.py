@@ -369,10 +369,11 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         for f in files:
             full_item = os.path.join(folder, f)
             if os.path.isdir(full_item):
+                dir_path = f"{safe_path}/{f}".strip("/")
                 html += f"""
                 <li>
                     📁
-                    <a href="/?path={safe_path}/{f}">
+                    <a href="/?path={dir_path}">
                         {f}
                     </a>
                 </li>
