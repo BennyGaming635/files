@@ -530,7 +530,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
-            envrio={
+            envrion={
                 "REQUEST_METHOD": "POST",
                 "CONTENT_TYPE": self.headers.get("Content-Type"),
             },
