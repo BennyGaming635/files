@@ -372,7 +372,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 dir_path = f"{safe_path}/{f}".strip("/")
                 html += f"""
                 <li>
-                    📁
+                    <img src="/icons/folder.png" width="20">
                     <a href="/?path={dir_path}">
                         {f}
                     </a>
