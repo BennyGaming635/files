@@ -46,3 +46,6 @@ You can also change the folder that files are shared via, which is currently /SH
 
 >[!CAUTION]
 > please dont professionally use this, actually dont use this at all
+
+## Plans to add next
+Next plans are to probably add PDF support, audio support, maybe even users to require login/an account to setup (would have to be enabled) otherwise consider this as the first major version of Files. Next stage is the PDF support, where you'll be able to read/view PDFs and maybe even do some PDF markup or edit the PDF and then save your changes onto/into that file stored on the server?
