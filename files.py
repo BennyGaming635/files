@@ -525,9 +525,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         form = cgi.FieldStorage(
             fp=self.rfile,
             headers=self.headers,
-            environ={
+            envrio={
                 "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": self.headers["Content-Type"],
+                "CONTENT_TYPE": self.headers.get("Content-Type"),
             },
         )
 
@@ -535,36 +535,27 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_response(400)
             self.end_headers()
             return
-
+        
         file_item = form["file"]
 
-        path = os.path.normpath(form.getvalue("currentPath", "")).lstrip("./")
+        path = form.getvalue("currentPath", "")
+        path = urllib.parse.unquote(path)
+        path = os.path.normpath(path).replace("\\", "/")
+        path = path.lstrip("/")
 
-        upload_folder = os.path.join(
-            SHARED_FOLDER,
-            path
-        )
-
+        upload_folder = os.path.join(SHARED_FOLDER, path)
         os.makedirs(upload_folder, exist_ok=True)
 
         if file_item.filename:
             filename = os.path.basename(file_item.filename)
-
-            filepath = os.path.join(
-                upload_folder,
-                filename
-            )
-
+            filepath = os.path.join(upload_folder, filename)
             with open(filepath, "wb") as f:
                 f.write(file_item.file.read())
 
         self.send_response(303)
-        self.send_header(
-            "Location",
-            f"/?path={path}"
-        )
+        self.send_header("Location", f"/?path={path}")
         self.end_headers()
-    
+        
     def delete_file(self):
         length = int(self.headers.get("Content-Length", 0))
         data = self.rfile.read(length).decode()
