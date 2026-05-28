@@ -8,9 +8,41 @@ import mimetypes
 import cgi
 import urllib.parse
 import preview
+import argparse
 
-PORT = 8000
-SHARED_FOLDER = "SHARED"
+parser = argparse.ArgumentParser(description="Simple Files")
+
+parser.add_argument(
+    "--port",
+    type=int,
+    default=8000,
+    help="Port which the server runs on"
+)
+
+parser.add_argument(
+    "--folder",
+    default="SHARED",
+    help="Folder which will be shared"
+)
+
+parser.add_argument(
+    "--host",
+    default="0.0.0.0",
+    help="Host/IP to bind to"
+)
+
+parser.add_argument(
+    "--name",
+    default="Simple Files",
+    help="Display name for server"
+)
+
+args = parser.parse_args()
+
+PORT = args.port
+SHARED_FOLDER = args.folder
+HOST = args.host
+SERVER_NAME = args.name
 
 class Handler(http.server.SimpleHTTPRequestHandler):
 
