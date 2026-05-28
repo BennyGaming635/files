@@ -12,6 +12,10 @@ def is_video(filename):
     ext = filename.lower().split(".")[-1]
     return ext in VIDEO_EXTS
 
+def is_pdf(filename):
+    ext = filename.lower().split(".")[-1]
+    return ext in PDF_EXTS
+
 def render_image(file_path):
     return f"""
     <html>
