@@ -2,6 +2,7 @@ import os
 
 IMAGE_EXTS = {"png", "jpg", "jpeg", "gif", "webp"}
 VIDEO_EXTS = {"mp4", "webm", "ogg"}
+PDF_EXTS = {"pdf"}
 
 def is_image(filename):
     ext = filename.lower().split(".")[-1]
