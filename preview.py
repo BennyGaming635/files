@@ -45,7 +45,7 @@ def render_image(file_path):
     </head>
     <body>
         <img src="/{file_path}?raw=1">
-        <a href="/{file_path}" download>Download</a>
+        <a href="/{file_path}?download=1" download>Download</a>
     </body>
     </html>
     """
@@ -86,7 +86,7 @@ def render_video(file_path):
         <video controls autoplay>
             <source src="/{file_path}?raw=1">
         </video>
-        <a href="/{file_path}?download=1">Download</a>
+        <a href="/{file_path}?download=1" download>Download</a>
     </body>
     </html>
     """
