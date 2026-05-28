@@ -621,7 +621,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_response(400)
             self.end_headers()
             return
-        
+
         file_item = form["file"]
 
         path = form.getvalue("currentPath", "")
@@ -629,19 +629,36 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         path = os.path.normpath(path).replace("\\", "/").lstrip("/")
 
         upload_folder = os.path.normpath(os.path.join(SHARED_FOLDER, path))
-        # Prevent directory traversal: ensure upload_folder is inside SHARED_FOLDER
+
         shared_abs = os.path.abspath(SHARED_FOLDER)
         upload_abs = os.path.abspath(upload_folder)
+
         if os.path.commonpath([shared_abs, upload_abs]) != shared_abs:
             upload_folder = SHARED_FOLDER
 
         os.makedirs(upload_folder, exist_ok=True)
 
-        if file_item.filename:
-            filename = os.path.basename(file_item.filename)
-            filepath = os.path.join(upload_folder, filename)
-            with open(filepath, "wb") as f:
-                f.write(file_item.file.read())
+        if not file_item.filename:
+            self.send_response(400)
+            self.end_headers()
+            return
+
+        filename = os.path.basename(file_item.filename)
+        filepath = os.path.join(upload_folder, filename)
+
+        file_data = file_item.file.read()
+        file_size = len(file_data)
+
+        current_usage = self.get_folder_size(SHARED_FOLDER)
+
+        if current_usage + file_size > MAX_STORAGE:
+            self.send_response(413)
+            self.send_header("Content-Type", "text/plain")
+            self.end_headers()
+            self.wfile.write(b"Storage limit reached")
+            return
+        with open(filepath, "wb") as f:
+            f.write(file_data)
 
         self.send_response(303)
         self.send_header("Location", f"/?path={path}")
