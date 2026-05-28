@@ -159,6 +159,24 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         elif self.path == "/mkdir":
             self.mkdir()
 
+    def get_folder_size(folder):
+        total = 0
+
+        for dirpath, dirnames, filenames in os.walk(folder):
+            for f in filenames:
+                fp = os.path.join(dirpath, f)
+
+                if os.path.exists(fp):
+                    total += os.path.getsize(fp)
+        return total
+    
+    def format_size(size):
+        for unit in ["B", "KB", "MB", "GB"]:
+            if size < 1024:
+                return f"{size:.2f} {unit}"
+            size /= 1024
+        return f"{size:.2f} TB"
+
     def home(self):
         query = urllib.parse.parse_qs(urllib.parse.urlsplit(self.path).query)
 
