@@ -37,12 +37,20 @@ parser.add_argument(
     help="Display name for server"
 )
 
+parser.add_argument(
+    "--max",
+    type=int,
+    default=1024,
+    help="Maximum storage in MB"
+)
+
 args = parser.parse_args()
 
 PORT = args.port
 SHARED_FOLDER = args.folder
 HOST = args.host
 SERVER_NAME = args.name
+MAX_STORAGE = args.max * 1024 * 1024
 
 class Handler(http.server.SimpleHTTPRequestHandler):
 
