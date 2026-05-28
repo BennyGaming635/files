@@ -42,10 +42,37 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         full_path = os.path.join(SHARED_FOLDER, file_path)
 
         if os.path.isfile(full_path):
+
+            if query.get("download", [""])[0] == "1":
+                with open(full_path, "rb") as f:
+                    self.send_response(200)
+
+                    content_type, _ = mimetypes.guess_type(full_path)
+
+                    self.send_header(
+                        "Content-Type",
+                        content_type or "application/octet-stream"
+                    )
+
+                    self.send_header(
+                        "Content-Disposition",
+                        f'attachment; filename="{os.path.basename(full_path)}"'
+                    )
+
+                    self.end_headers()
+                    self.wfile.write(f.read())
+                return
+
             if query.get("raw", [""])[0] == "1":
                 self.send_response(200)
+
                 content_type, _ = mimetypes.guess_type(full_path)
-                self.send_header("Content-Type", content_type or "application/octet-stream")
+
+                self.send_header(
+                    "Content-Type",
+                    content_type or "application/octet-stream"
+                )
+
                 self.end_headers()
 
                 with open(full_path, "rb") as f:
@@ -57,7 +84,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_header("Content-Type", "text/html")
                 self.end_headers()
 
-                self.wfile.write(preview.render_image(file_path).encode())
+                self.wfile.write(
+                    preview.render_image(file_path).encode()
+                )
                 return
 
             if preview.is_video(full_path):
@@ -65,18 +94,9 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 self.send_header("Content-Type", "text/html")
                 self.end_headers()
 
-                self.wfile.write(preview.render_video(file_path).encode())
-                return
-            if "download=1" in self.path:
-                with open(full_path, "rb") as f:
-                    self.send_response(200)
-                    self.send_header("Content-Type", "application/octet-stream")
-                    self.send_header(
-                        "Content-Disposition",
-                        f'attachment; filename="{os.path.basename(full_path)}"'
-                    )
-                    self.end_headers()
-                    self.wfile.write(f.read())
+                self.wfile.write(
+                    preview.render_video(file_path).encode()
+                )
                 return
 
         self.send_error(404, "File not found")
