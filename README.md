@@ -39,9 +39,8 @@ URL: http://IP_ADDRESS:8000
 ```
 
 ## What can I change?
-At the moment, the only recommended changes you should make are changes to the icons (which are 48x48px). These icons were sourced via Icons8 but they can easily be changed out.
-You can also change the folder that files are shared via, which is currently /SHARED/. You can also change the port if you want too.
-
+If you would like, you can use special args when running *files.py* with arguments like --host or --name. If you want to learn about these, please [read this](BOOT.md).
+Our *amazing* icons were selected via Icons8, but you can still replace icons which are stored in *icons/* but the server folder can only be changed by [boot args](BOOT.md).
 
 
 >[!CAUTION]
