@@ -95,3 +95,49 @@ def render_video(file_path):
     </body>
     </html>
     """
+
+def render_pdf(file_path):
+    return f"""
+    <html>
+    <head>
+        <title>Preview</title>
+        <style>
+            body {{
+                margin: 0;
+                background: #0f172a;
+                color: white;
+                font-family: Arial;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }}
+
+            iframe {{
+                flex: 1;
+                width: 100%;
+                border: none;
+            }}
+
+            .topbar {{
+                padding: 10px;
+                background: #1e293b;
+                text-align: center;
+            }}
+
+            a {{
+                margin-top: 20px;
+                color: #60a5fa;
+                text-decoration: none;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="topbar">
+            <a href="/{file_path}?download=1" download>Download</a>
+        </div>
+        <iframe src="/{file_path}?raw=1"></iframe>
+    </body>
+    </html>
+    """
