@@ -678,11 +678,11 @@ os.makedirs(SHARED_FOLDER, exist_ok=True)
 ip = get_ip()
 
 print("=" * 40)
-print("SIMPLE FILES (UPLOADS ENABLED)")
+print(f"{SERVER_NAME} (UPLOADS ENABLED)")
 print("=" * 40)
 print(f"Folder: {SHARED_FOLDER}")
 print(f"URL: http://{ip}:{PORT}")
 print("=" * 40)
 
-with socketserver.TCPServer(("0.0.0.0", PORT), Handler) as httpd:
+with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
     httpd.serve_forever()
