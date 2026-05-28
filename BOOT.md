@@ -70,6 +70,24 @@ to:
 
 ---
 
+### Change Site-Wide Storage Quota
+
+To change the allowed amount of storage to be used on your instance, use:
+
+```bash
+python files.py --max <number>
+```
+
+Example:
+```bash
+python file.py --max 5000
+```
+
+> [!NOTE]
+> Your storage number should be entered in bytes, so 1gb = 1,073,741,824 bytes
+
+---
+
 ### Change the Server Name
 
 To change the displayed server name, use:
