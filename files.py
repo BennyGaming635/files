@@ -78,6 +78,16 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 with open(full_path, "rb") as f:
                     self.wfile.write(f.read())
                 return
+            
+            if preview.is_pdf(full_path):
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+
+                self.wfile.write(
+                    preview.render_pdf(file_path).encode()
+                )
+                return
 
             if preview.is_image(full_path):
                 self.send_response(200)
