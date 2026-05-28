@@ -635,6 +635,8 @@ def get_icon(filename):
         "ogg": "video.png",
         "wav": "video.png",
         "mov": "video.png",
+
+        "pdf": "pdf.png",
     }
 
     return mapping.get(ext, "file.png")
